@@ -11,6 +11,7 @@ import javax.ws.rs.core.Response
 @ApplicationScoped
 
 class FruitResource {
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -23,8 +24,8 @@ class FruitResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     fun getSingle(@PathParam("id") id: Long): Response {
-        val fruits = Fruit.findById(id)
-        return if (fruits != null) Response.ok(fruits).build() else
+        val fruit = Fruit.findById(id)
+        return if (fruit != null) Response.ok(fruit).build() else
             Response.status(Response.Status.NOT_FOUND).build()
     }
 
@@ -33,11 +34,12 @@ class FruitResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     fun create(fruit: Fruit): Response {
-        if (fruit.id != null) {
-            throw WebApplicationException("Id was invalidly set on request.", 422)
+        return if (Fruit.findByName(fruit.name) != null) {
+            Response.status(Response.Status.BAD_REQUEST).build()
+        } else {
+            fruit.persist()
+            Response.ok(fruit).status(201).build()
         }
-        fruit.persist()
-        return Response.ok(fruit).status(201).build()
     }
 
     @PUT
@@ -45,11 +47,10 @@ class FruitResource {
     @Transactional
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    fun update(@PathParam("id") id: Long, fruit: Fruit): Fruit {
-        val entity: Fruit = Fruit.findById(id)
-            ?: throw WebApplicationException("Fruit with id of $id does not exist.", 404)
-        entity.name = fruit.name
-        return entity
+    fun update(@PathParam("id") id: Long, fruit: Fruit): Response {
+        val newFruit = Fruit.findById(id) ?: return Response.status(Response.Status.NOT_FOUND).build()
+        newFruit.name = fruit.name
+        return Response.ok(newFruit).build()
     }
 
     @DELETE
@@ -58,9 +59,10 @@ class FruitResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     fun delete(@PathParam("id") id: Long): Response {
-        val entity: Fruit = Fruit.findById(id)
-            ?: throw WebApplicationException("Fruit with id of $id does not exist.", 404)
-        entity.delete()
-        return Response.status(204).build()
+        return if (Fruit.deleteById(id)) {
+            Response.status(Response.Status.NO_CONTENT).build()
+        } else {
+            Response.status(Response.Status.BAD_REQUEST).build()
+        }
     }
 }
