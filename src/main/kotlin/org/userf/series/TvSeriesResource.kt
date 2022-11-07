@@ -25,7 +25,7 @@ class TvSeriesResource {
     @Produces(MediaType.APPLICATION_JSON)
     fun get(@QueryParam("title") title: String): Response {
         val serie = tvSeriesProxy.get(title)
-        serie.episodes = episodeProxy.get(serie.id)
+//        serie.episodes = episodeProxy.get(serie.id)
         tvSeries.add(serie)
         return Response.ok(tvSeries).build()
     }
