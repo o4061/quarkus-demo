@@ -1,5 +1,6 @@
 package org.userf.series
 
+import org.eclipse.microprofile.faulttolerance.Fallback
 import org.eclipse.microprofile.rest.client.inject.RestClient
 import org.userf.series.model.TvSerie
 import org.userf.series.proxy.EpisodesProxy
@@ -23,10 +24,16 @@ class TvSeriesResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Fallback(fallbackMethod = "fallbackGet")
     fun get(@QueryParam("title") title: String): Response {
         val serie = tvSeriesProxy.get(title)
-//        serie.episodes = episodeProxy.get(serie.id)
+        val episodes = episodeProxy.get(serie.id)
         tvSeries.add(serie)
-        return Response.ok(tvSeries).build()
+        return Response.ok(episodes).build()
+    }
+
+
+    private fun fallbackGet(title: String): Response {
+        return Response.ok(ArrayList<Any>()).build()
     }
 }
