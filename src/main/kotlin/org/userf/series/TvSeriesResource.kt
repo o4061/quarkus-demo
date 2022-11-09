@@ -2,15 +2,13 @@ package org.userf.series
 
 import io.quarkus.runtime.Startup
 import org.eclipse.microprofile.rest.client.inject.RestClient
+import org.userf.series.model.TvSerie
 import org.userf.series.proxy.EpisodesProxy
 import org.userf.series.proxy.TvSeriesProxy
 import org.userf.series.repository.TvSerieRepository
 import javax.inject.Inject
 import javax.transaction.Transactional
-import javax.ws.rs.GET
-import javax.ws.rs.Path
-import javax.ws.rs.Produces
-import javax.ws.rs.QueryParam
+import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 
@@ -46,4 +44,14 @@ class TvSeriesResource {
         val serie = tvSerieRepository.getByName(title) ?: return Response.status(Response.Status.NOT_FOUND).build()
         return Response.ok(serie).build()
     }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    fun create(tvSerie: TvSerie): Response {
+        tvSerieRepository.persist(tvSerie)
+        return Response.ok(tvSerie).build()
+    }
+
 }
