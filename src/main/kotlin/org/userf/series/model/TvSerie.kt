@@ -24,9 +24,7 @@ class TvSerie {
     val premiered: LocalDate? = null
     val officialSite: URL? = null
     val externals: Externals? = null
-
-//    @OneToMany(targetEntity = Episode::class, fetch = FetchType.EAGER)
-//    var episode: List<Episode>? = null
-//    var episodes: List<Episode>? = listOf()
+    @ElementCollection
+    val genres: List<String>? = null
 }
 
