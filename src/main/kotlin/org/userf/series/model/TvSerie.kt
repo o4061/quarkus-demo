@@ -24,7 +24,9 @@ class TvSerie {
     val premiered: LocalDate? = null
     val officialSite: URL? = null
     val externals: Externals? = null
+
     @ElementCollection
     val genres: List<String>? = null
+    val schedule: Schedule? = null
 }
 
