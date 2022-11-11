@@ -24,5 +24,4 @@ interface TvSeriesProxy {
     @GET
     @Path("shows")
     fun getPage(@QueryParam("page") page: Int): List<TvSerie>
-
 }

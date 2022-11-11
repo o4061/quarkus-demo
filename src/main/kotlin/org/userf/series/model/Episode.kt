@@ -1,8 +1,13 @@
 package org.userf.series.model
 
-data class Episode(
-    val id: Long,
-    val name: String,
-    val season: Long,
-    val summary: String
-)
+import javax.persistence.Entity
+import javax.persistence.Id
+
+@Entity
+class Episode {
+    @Id
+    val id: Long = -1
+    val name: String = ""
+    val season: Long = -1
+    val summary: String = ""
+}

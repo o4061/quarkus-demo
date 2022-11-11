@@ -2,9 +2,7 @@ package org.userf.series.model
 
 import java.net.URL
 import java.time.LocalDate
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
+import javax.persistence.*
 
 @Entity
 class TvSerie {
@@ -25,7 +23,10 @@ class TvSerie {
     val language: String = ""
     val premiered: LocalDate? = null
     val officialSite: URL? = null
-//    val genres: List<String> = listOf()
+    val externals: Externals? = null
+
+//    @OneToMany(targetEntity = Episode::class, fetch = FetchType.EAGER)
+//    var episode: List<Episode>? = null
 //    var episodes: List<Episode>? = listOf()
 }
 
