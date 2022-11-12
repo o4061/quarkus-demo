@@ -1,5 +1,6 @@
 package org.userf.series.model
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import java.net.URL
 import java.time.LocalDate
 import javax.persistence.*
@@ -7,13 +8,15 @@ import javax.persistence.*
 @Entity
 class TvSerie {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(
         insertable = false,
         updatable = false,
     )
+    val serieId: Long = -1
 
     val id: Long = -1
-    val name: String = ""
+    var name: String = ""
     val url: URL? = null
     val status: String = ""
     val runtime: Int = -1
@@ -27,6 +30,11 @@ class TvSerie {
 
     @ElementCollection
     val genres: List<String>? = null
-    val schedule: Schedule? = null
+
+    @JsonProperty("schedule")
+    val mySchedule: Schedule? = null
+
+    @OneToMany(mappedBy = "tvSerie", orphanRemoval = true)
+    var episode: List<Episode>? = null
 }
 

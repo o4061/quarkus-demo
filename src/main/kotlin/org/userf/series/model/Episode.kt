@@ -1,13 +1,17 @@
 package org.userf.series.model
 
-import javax.persistence.Entity
-import javax.persistence.Id
+import javax.persistence.*
 
 @Entity
 class Episode {
     @Id
-    val id: Long = -1
-    val name: String = ""
-    val season: Long = -1
-    val summary: String = ""
+    @GeneratedValue
+    var episodeId: Long = -1
+    var serieId: Long = -1
+    var name: String = ""
+    var season: Long = -1
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id")
+    private val tvSerie: TvSerie? = null
 }
